@@ -9,14 +9,14 @@ List the download queue on the local machine.
 
 Assumes the aria2 RPC server is available at localhost:6800
 
-## initscripts/aria2c
+## initscript/aria2c
 
 Example Debian init script to put in ```/etc/init.d/```
 
 It is set up for my own installation on Debian Squeeze (see instructions below).  If you're using a recent version of Ubuntu and its packaged version
 of aria2 you will want to change ```/opt/aria2/bin``` for ```/usr/bin```
 
-## initscripts/aria2.conf
+## initscript/aria2.conf
 
 Example config file to put in ```/etc``` to use alongside the init script.
 
@@ -40,7 +40,7 @@ $ sudo ln -s aria2-1.16.3 aria2
 $ sudo ln -s /opt/aria2/bin/aria2c /usr/local/bin/aria2c
 ```
 
-I then copied in ```initscripts/aria2c``` to ```/etc/init.d/aria2c```.
+I then copied in ```initscript/aria2c``` to ```/etc/init.d/aria2c```.
 
 Put the following in ```/etc/aria2.conf```:
 
