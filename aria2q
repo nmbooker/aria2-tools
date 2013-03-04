@@ -9,22 +9,17 @@ and it needs to be a newer version (one with --enable-rpc not --enable-xml-rpc).
 import sys
 import argparse
 import xmlrpclib
+import os.path
 
 
 def main(options):
     """Main program."""
     server = xmlrpclib.ServerProxy('http://localhost:6800/rpc')
     active = server.aria2.tellActive()
-    print "Active:" if active else "No active downloads"
-    list_jobs(server, active)
-
-    waiting = server.aria2.tellWaiting(0, 10000)
-    print "Waiting:" if waiting else "No waiting downloads"
-    list_jobs(server, waiting)
-
-    stopped = server.aria2.tellStopped(0, 10000)
-    print "Stopped:" if stopped else "No stopped downloads"
-    list_jobs(server, stopped)
+    jobs = server.aria2.tellActive()
+    jobs.extend(server.aria2.tellWaiting(0, 10000))
+    jobs.extend(server.aria2.tellStopped(0, 10000))
+    list_jobs(server, jobs)
     return
 
 def list_jobs(server, job_list):
@@ -33,9 +28,10 @@ def list_jobs(server, job_list):
 
 def job_details(server, job_status):
     gid = job_status['gid']
+    status = job_status['status']
     percent = percentage(job_status)
-    filename = top_file_name(server, gid)
-    return "%9s    %5.1f%%    %s" % (gid, percent, filename)
+    filename = os.path.basename(top_file_name(server, gid))
+    return "%4s  %8s  %5.1f%%    %s" % (gid, status, percent, filename)
 
 def percentage(job_status):
     length = float(job_status['totalLength'])
