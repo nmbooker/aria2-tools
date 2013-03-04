@@ -11,10 +11,10 @@
 ### END INIT INFO
 
 NAME=aria2c
-ARIA2C=/usr/bin/$NAME
+ARIA2C=/opt/aria2/bin/$NAME
 PIDFILE=/var/run/$NAME.pid
 CONF=/etc/aria2.conf
-ARGS="--enable-rpc --conf-path=${CONF}"
+ARGS="--conf-path=${CONF}"
 USER="nobody"
 
 test -f $ARIA2C || exit 0
