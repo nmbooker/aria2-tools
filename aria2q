@@ -1,0 +1,59 @@
+#! /usr/bin/env python
+
+"""View the local aria2 queue.
+
+Note the aria2 XML-RPC server must be running on localhost:6800
+and it needs to be a newer version (one with --enable-rpc not --enable-xml-rpc).
+"""
+
+import sys
+import argparse
+import xmlrpclib
+
+
+def main(options):
+    """Main program."""
+    server = xmlrpclib.ServerProxy('http://localhost:6800/rpc')
+    active = server.aria2.tellActive()
+    print "Active:" if active else "No active downloads"
+    list_jobs(server, active)
+
+    waiting = server.aria2.tellWaiting(0, 10000)
+    print "Waiting:" if waiting else "No waiting downloads"
+    list_jobs(server, waiting)
+
+    stopped = server.aria2.tellStopped(0, 10000)
+    print "Stopped:" if stopped else "No stopped downloads"
+    list_jobs(server, stopped)
+    return
+
+def list_jobs(server, job_list):
+    for dl in job_list:
+        print job_details(server, dl)
+
+def job_details(server, job_status):
+    gid = job_status['gid']
+    percent = percentage(job_status)
+    filename = top_file_name(server, gid)
+    return "%9s    %5.1f%%    %s" % (gid, percent, filename)
+
+def percentage(job_status):
+    length = float(job_status['totalLength'])
+    completed = float(job_status['completedLength'])
+    return (completed * 100) / length
+
+def top_file_name(server, gid):
+    return server.aria2.getFiles(gid)[0]['path']
+
+def get_options():
+    """Get options for the script."""
+    parser = argparse.ArgumentParser(
+            description="view the aria2 queue on localhost:6800",
+             )
+    # parser.add_argument() calls here
+    options = parser.parse_args()
+    # extra processing of options here
+    return options
+
+if __name__ == "__main__":
+    main(get_options())
