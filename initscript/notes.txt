@@ -1,0 +1,3 @@
+Debian init script:
+
+http://sourceforge.net/apps/phpbb/aria2/viewtopic.php?f=1&t=17

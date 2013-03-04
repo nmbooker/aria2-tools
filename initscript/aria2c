@@ -1,0 +1,48 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          Aria2
+# Required-Start:    $network $local_fs $remote_fs
+# Required-Stop::    $network $local_fs $remote_fs
+# Should-Start:      $all
+# Should-Stop:       $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Aria2 - Download Manager
+### END INIT INFO
+
+NAME=aria2c
+ARIA2C=/usr/bin/$NAME
+PIDFILE=/var/run/$NAME.pid
+CONF=/etc/aria2.conf
+ARGS="--enable-rpc --conf-path=${CONF}"
+USER="nobody"
+
+test -f $ARIA2C || exit 0
+
+. /lib/lsb/init-functions
+
+echo $PIDFILE
+
+case "$1" in
+start)  log_daemon_msg "Starting aria2c" "aria2c"
+        start-stop-daemon --start --quiet -b -m --pidfile $PIDFILE --chuid $USER --startas $ARIA2C -- $ARGS
+        log_end_msg $?
+        ;;
+stop)   log_daemon_msg "Stopping aria2c" "aria2c"
+        start-stop-daemon --stop --quiet --pidfile $PIDFILE
+        log_end_msg $?
+        ;;
+restart|reload|force-reload)
+        log_daemon_msg "Restarting aria2c" "aria2c"
+        start-stop-daemon --stop --retry 5 --quiet --pidfile $PIDFILE
+        start-stop-daemon --start --quiet -b -m --pidfile $PIDFILE --chuid $USER --startas $ARIA2C -- $ARGS
+        log_end_msg $?
+        ;;
+status)
+        status_of_proc -p $PIDFILE $ARIA2C aria2c && exit 0 || exit $?
+        ;;
+*)      log_action_msg "Usage: /etc/init.d/aria2c {start|stop|restart|reload|force-reload|status}"
+        exit 2
+        ;;
+esac
+exit 0
