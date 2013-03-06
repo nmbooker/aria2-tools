@@ -40,12 +40,21 @@ $ sudo ln -s aria2-1.16.3 aria2
 $ sudo ln -s /opt/aria2/bin/aria2c /usr/local/bin/aria2c
 ```
 
+Create a user to run the daemon as, and a download directory
+
+```
+$ sudo useradd --system --home-dir /var/local/aria2 download
+$ sudo mkdir /var/local/aria2/down
+$ sudo chown download: /var/local/aria2/down
+$ sudo chmod ug=rwx,o=rx /var/local/aria2/down
+```
+
 I then copied in ```initscript/aria2c``` to ```/etc/init.d/aria2c```.
 
 Put the following in ```/etc/aria2.conf```:
 
 ```
-dir=/net/windle/Qdownload/aria2
+dir=/var/local/aria2/down
 disable-ipv6=true
 rpc-listen-all=true
 enable-rpc=true

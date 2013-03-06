@@ -15,7 +15,7 @@ ARIA2C=/opt/aria2/bin/$NAME
 PIDFILE=/var/run/$NAME.pid
 CONF=/etc/aria2.conf
 ARGS="--conf-path=${CONF}"
-USER="nobody"
+USER="download"
 
 test -f $ARIA2C || exit 0
 
