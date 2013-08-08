@@ -58,6 +58,7 @@ dir=/var/local/aria2/down
 disable-ipv6=true
 rpc-listen-all=true
 enable-rpc=true
+on-download-complete=/opt/aria2-tools/hooks/aria2_notify_complete
 ```
 
 (you should set your ```dir=``` to the directory you want downloads to go in)

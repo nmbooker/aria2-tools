@@ -1,0 +1,49 @@
+#! /usr/bin/env python
+
+"""Notify that aria2 download is complete.
+
+This implements the --on-download-complete hook interface.
+"""
+
+import sys
+import os
+import argparse
+import subprocess
+import ConfigParser
+
+def main(options):
+    """Main program."""
+    config = ConfigParser.SafeConfigParser()
+    config.read('/etc/aria2-tools/aria2_notify.conf')
+    to = config.get('email', 'to')
+    recipients = to.split(',')
+    target_basename = os.path.basename(options.target_file)
+    subject = "Downloaded %s" % (target_basename,)
+    body = "First file: %s\n" % (options.target_file,)
+    body += "GID: %s\n" % (options.gid)
+    body += "Num files: %s\n" % (options.num_files)
+    body += "\n"
+    body += "--\n"
+    body += sys.argv[0]
+    mail_args = ['mailx', '-s', subject]
+    mail_args.extend(recipients)
+    mail_proc = subprocess.Popen(mail_args, stdin=subprocess.PIPE)
+    mail_proc.stdin.write(body)
+    mail_proc.stdin.close()
+    mail_proc.wait()
+    return
+
+def get_options():
+    """Get options for the script."""
+    parser = argparse.ArgumentParser(
+               description="DESCRIPTION",
+             )
+    parser.add_argument('gid', help='gid of the download in aria2')
+    parser.add_argument('num_files', help='number of files')
+    parser.add_argument('target_file', help='name of first file on filesystem')
+    options = parser.parse_args()
+    # extra processing of options here
+    return options
+
+if __name__ == "__main__":
+    main(get_options())
