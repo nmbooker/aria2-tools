@@ -14,7 +14,8 @@ import os.path
 
 def main(options):
     """Main program."""
-    server = xmlrpclib.ServerProxy('http://localhost:6800/rpc')
+    url = os.getenv('ARIA2Q_URL', 'http://localhost:6800/rpc')
+    server = xmlrpclib.ServerProxy(url)
     active = server.aria2.tellActive()
     jobs = server.aria2.tellActive()
     jobs.extend(server.aria2.tellWaiting(0, 10000))
