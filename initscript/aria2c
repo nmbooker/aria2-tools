@@ -11,7 +11,7 @@
 ### END INIT INFO
 
 NAME=aria2c
-ARIA2C=/opt/aria2/bin/$NAME
+ARIA2C=/usr/bin/$NAME
 PIDFILE=/var/run/$NAME.pid
 CONF=/etc/aria2.conf
 ARGS="--conf-path=${CONF}"
