@@ -13,8 +13,7 @@ Assumes the aria2 RPC server is available at localhost:6800
 
 Example Debian init script to put in ```/etc/init.d/```
 
-It is set up for my own installation on Debian Squeeze (see instructions below).  If you're using a recent version of Ubuntu and its packaged version
-of aria2 you will want to change ```/opt/aria2/bin``` for ```/usr/bin```
+It is set up for Ubuntu 17.04 (Zesty's) packaged aria2c from the package "aria2" (see instructions below).  If you're using Debian Squeeze you will want to change ```/usr/bin``` for ```/opt/aria2/bin``` and follow the instructions to install into ```/opt/aria2``` below.
 
 ## initscript/aria2.conf
 
